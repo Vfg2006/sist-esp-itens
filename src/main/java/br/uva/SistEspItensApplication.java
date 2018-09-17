@@ -1,4 +1,4 @@
-package br.uva.sistespitens;
+package br.uva;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
