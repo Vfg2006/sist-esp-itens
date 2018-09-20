@@ -1,0 +1,39 @@
+body {
+	color: #555;
+	background-color: #efefef;
+}
+
+.jumbotron {
+	background-color: #fff;
+	font-size: 20px;
+	margin-top: 30px;
+}
+
+.jumbotron h2 {
+	font-size: 30px;
+	margin-top: -30px;
+}
+
+.welcome-jumbotron h1 {
+	margin-bottom: 60px;
+}
+
+.welcome-jumbotron p {
+	margin-bottom: 60px;
+	font-size: 30px;
+}
+
+.radio {
+	margin-top: 25px;
+}
+
+.btn {
+	margin-top: 50px;
+	margin-bottom: -30px;
+}
+
+.main-header {
+	background-color: #0e4204;
+	color: white;
+}
+
