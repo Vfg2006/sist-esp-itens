@@ -27,17 +27,17 @@
 	<div class="content-wrapper">
 		<div class="container">
 
-			<div class="jumbotron text-center">
-				<h1>Bem-vindo</h1>
+			<div class="jumbotron">
+				<div class="text-center">
+					<h2 th:text="${atributo.resultadoFinal}"></h2>
 
-				<a href="/questions">Iniciar perguntas</a>
+					<img th:src="@{${pathImg}}" class="img-responsive img" />
+
+					<a href="/"><p>Clique aqui para reiniciar</p></a>
+				</div>
 			</div>
 		</div>
 	</div>
-
-	<footer class="fixar-rodape">
-		<p>Desenvolvido por Vinicius Gon&ccedil;alves</p>
-	</footer>
 
 	<script src="bootstrap/js/bootstrap.min.js"></script>
 </body>

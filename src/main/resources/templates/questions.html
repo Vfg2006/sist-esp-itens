@@ -27,14 +27,31 @@
 	<div class="content-wrapper">
 		<div class="container">
 
-			<div class="jumbotron text-center">
-				<h1>Bem-vindo</h1>
+			<div class="jumbotron">
 
-				<a href="/questions">Iniciar perguntas</a>
+				<form class="container" method="post" th:action="@{/responder}" th:object="${atributo}">
+					<h2 th:text="*{pergunta}" ></h2>
+					<input hidden th:field="*{pergunta}">
+
+					<div class="radio">
+						<div class="form-check-inline">
+							<label class="form-check-label"> 
+								<input type="radio" class="form-check-input" th:field="*{resposta}" value=1 name="optradio">Sim
+							</label>
+						</div>
+						<div class="form-check-inline">
+							<label class="form-check-label"> 
+								<input type="radio" class="form-check-input" th:field="*{resposta}" value=0 name="optradio">Nao
+							</label>
+						</div>
+					</div>
+					
+					<button class="btn btn-success" type="submit">Enviar</button>
+				</form>
 			</div>
 		</div>
 	</div>
-
+	
 	<footer class="fixar-rodape">
 		<p>Desenvolvido por Vinicius Gon&ccedil;alves</p>
 	</footer>

@@ -1,36 +1,36 @@
 package br.uva.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import br.uva.main.MotorInferencia;
-import br.uva.modelo.PerguntaResposta;
 
 @Controller
 public class IndexController {
 
-	@Autowired
-	private MotorInferencia mi;
-
 	@RequestMapping("/")
 	public String index(Model model) {
-		model.addAttribute("pr", new PerguntaResposta("O item é comestivel ?"));
 
 		return "index";
 	}
+	
+	@RequestMapping(value = "/arvoreDecisao", method = RequestMethod.GET)
+    public HttpEntity<byte[]> download() throws IOException {
 
-	@RequestMapping(value = "/responder", method = RequestMethod.POST)
-	public String form(Model model, @ModelAttribute("pr") PerguntaResposta pr) {
-		System.out.println(pr);
+        byte[] arquivo = Files.readAllBytes( Paths.get("/images/arvoreDecisao.png") );
 
-		
-//		String novaPergunta = null;
-		pr.setPergunta("Testando");
-		model.addAttribute("pr", pr);
-		return "index";
-	}
+        HttpHeaders httpHeaders = new HttpHeaders();
+
+        httpHeaders.add("Content-Disposition", "attachment;filename=\"arvoreDecisao.png\"");
+
+        HttpEntity<byte[]> entity = new HttpEntity<byte[]>( arquivo, httpHeaders);
+
+        return entity;
+    }
 }

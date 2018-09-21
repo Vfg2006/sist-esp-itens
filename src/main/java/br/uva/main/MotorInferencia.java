@@ -1,49 +1,45 @@
 package br.uva.main;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 import org.springframework.stereotype.Service;
 
+import br.uva.modelo.Atributo;
 import br.uva.modelo.DecisionTree;
+import br.uva.modelo.DecisionTree.Node;
 
 @Service
 public class MotorInferencia {
 
-	static DecisionTree newTree;
-
-	static BufferedReader keyboardInput = new BufferedReader(new InputStreamReader(System.in));
-
-	public static void main(String[] args) {
-
+	private DecisionTree newTree;
+	private Node nodeAtual;
+	
+	public MotorInferencia() {
+		System.out.println("CRIANDO MOTOR DE INFERENCIA");
 		newTree = new DecisionTree();
 
 		generateTree();
-
-//		System.out.println("\nOUTPUT DECISION TREE");
-//		System.out.println("====================");
-//		newTree.outputBinTree();
-
-		try {
-			queryTree();
-		} catch (IOException e) {
-			e.printStackTrace();
+		
+		nodeAtual = newTree.getNodeRaiz();
+	}
+	
+	public String getPrimeiraPergunta() {
+		return nodeAtual.getInfo();
+	}
+	
+	public Atributo inferirResposta(Atributo atributo) {
+		
+		nodeAtual = newTree.escutandoResposta(nodeAtual, atributo.isResposta());
+		atributo.setPergunta(nodeAtual.getInfo());
+		
+		if(newTree.verificaSeEhFolha(nodeAtual)) {
+			atributo.setResultadoFinal(nodeAtual.getInfo());
+			return atributo;
 		}
-
+		
+		return atributo;
 	}
 
-	private static void queryTree() throws IOException {
-		System.out.println("\nQUERY DECISION TREE");
-		System.out.println("===================");
-		newTree.queryBinTree();
 
-		// Option to exit
-
-		optionToExit();
-	}
-
-	static void generateTree() {
+	public void generateTree() {
 		System.out.println("\nGENERATE DECISION TREE\n");
 
 		newTree.criarRaiz(1, "É comestível?");
@@ -145,20 +141,5 @@ public class MotorInferencia {
 		newTree.addNoNode(254, 509, "Geladeira");
 		newTree.addYesNode(505, 1010, "Garrafa");
 		newTree.addNoNode(505, 1011, "Garfo");
-	}
-
-	static void optionToExit() throws IOException {
-		System.out.println("Exit? (enter \"Yes\" or \"No\")");
-		String answer = keyboardInput.readLine();
-		if (answer.equals("Yes"))
-			return;
-		else {
-			if (answer.equals("No"))
-				queryTree();
-			else {
-				System.out.println("ERROR: Must answer \"Yes\" or \"No\"");
-				optionToExit();
-			}
-		}
 	}
 }

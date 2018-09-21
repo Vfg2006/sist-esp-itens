@@ -9,27 +9,40 @@ import org.springframework.stereotype.Service;
 @Service
 public class DecisionTree {
 
-	private class BinTree {
+	public class Node {
 
 		private int nodeID;
-		private String perguntaOuResposta = null;
-		private BinTree yesBranch = null;
-		private BinTree noBranch = null;
+		private String info = null;
+		private Node yesBranch = null;
+		private Node noBranch = null;
 
-		public BinTree(int novoNodeID, String novaPerguntaOuResposta) {
+		public Node(int novoNodeID, String novaInfo) {
 			nodeID = novoNodeID;
-			perguntaOuResposta = novaPerguntaOuResposta;
+			info = novaInfo;
 		}
+
+		public String getInfo() {
+			return info;
+		}
+
+		public void setInfo(String info) {
+			this.info = info;
+		}
+		
 	}
 
-	static BufferedReader keyboardInput = new BufferedReader(new InputStreamReader(System.in));
-	BinTree nodeRaiz = null;
+//	static BufferedReader keyboardInput = new BufferedReader(new InputStreamReader(System.in));
+	Node nodeRaiz = null;
+	
+	public Node getNodeRaiz() {
+		return nodeRaiz;
+	}
 
 	public DecisionTree() {
 	}
 
 	public void criarRaiz(int novoNodeID, String novaPerguntaOuResposta) {
-		nodeRaiz = new BinTree(novoNodeID, novaPerguntaOuResposta);
+		nodeRaiz = new Node(novoNodeID, novaPerguntaOuResposta);
 		System.out.println("Criado Node Raiz " + novoNodeID);
 	}
 
@@ -53,15 +66,16 @@ public class DecisionTree {
 
 	/* SEARCH TREE AND ADD YES NODE */
 
-	private boolean searchTreeAndAddYesNode(BinTree nodeAtual, int NodeIDExistente, int novoNodeID, String novaPerguntaOuResposta) {
+	private boolean searchTreeAndAddYesNode(Node nodeAtual, int NodeIDExistente, int novoNodeID,
+			String novaPerguntaOuResposta) {
 		if (nodeAtual.nodeID == NodeIDExistente) {
 			// Found node
 			if (nodeAtual.yesBranch == null)
-				nodeAtual.yesBranch = new BinTree(novoNodeID, novaPerguntaOuResposta);
+				nodeAtual.yesBranch = new Node(novoNodeID, novaPerguntaOuResposta);
 			else {
 				System.out.println("WARNING: Overwriting previous node " + "(id = " + nodeAtual.yesBranch.nodeID
 						+ ") linked to yes branch of node " + NodeIDExistente);
-				nodeAtual.yesBranch = new BinTree(novoNodeID, novaPerguntaOuResposta);
+				nodeAtual.yesBranch = new Node(novoNodeID, novaPerguntaOuResposta);
 			}
 			return (true);
 		} else {
@@ -72,7 +86,8 @@ public class DecisionTree {
 				} else {
 					// Try no branch if it exists
 					if (nodeAtual.noBranch != null) {
-						return (searchTreeAndAddYesNode(nodeAtual.noBranch, NodeIDExistente, novoNodeID, novaPerguntaOuResposta));
+						return (searchTreeAndAddYesNode(nodeAtual.noBranch, NodeIDExistente, novoNodeID,
+								novaPerguntaOuResposta));
 					} else
 						return (false); // Not found here
 				}
@@ -101,15 +116,16 @@ public class DecisionTree {
 
 	/* SEARCH TREE AND ADD NO NODE */
 
-	private boolean searchTreeAndAddNoNode(BinTree nodeAtual, int NodeIDExistente, int novoNodeID, String novaPerguntaOuResposta) {
+	private boolean searchTreeAndAddNoNode(Node nodeAtual, int NodeIDExistente, int novoNodeID,
+			String novaPerguntaOuResposta) {
 		if (nodeAtual.nodeID == NodeIDExistente) {
 			// Found node
 			if (nodeAtual.noBranch == null)
-				nodeAtual.noBranch = new BinTree(novoNodeID, novaPerguntaOuResposta);
+				nodeAtual.noBranch = new Node(novoNodeID, novaPerguntaOuResposta);
 			else {
 				System.out.println("WARNING: Overwriting previous node " + "(id = " + nodeAtual.noBranch.nodeID
 						+ ") linked to yes branch of node " + NodeIDExistente);
-				nodeAtual.noBranch = new BinTree(novoNodeID, novaPerguntaOuResposta);
+				nodeAtual.noBranch = new Node(novoNodeID, novaPerguntaOuResposta);
 			}
 			return (true);
 		} else {
@@ -120,7 +136,8 @@ public class DecisionTree {
 				} else {
 					// Try no branch if it exists
 					if (nodeAtual.noBranch != null) {
-						return (searchTreeAndAddNoNode(nodeAtual.noBranch, NodeIDExistente, novoNodeID, novaPerguntaOuResposta));
+						return (searchTreeAndAddNoNode(nodeAtual.noBranch, NodeIDExistente, novoNodeID,
+								novaPerguntaOuResposta));
 					} else
 						return (false); // Not found here
 				}
@@ -135,45 +152,20 @@ public class DecisionTree {
 	/*                                               */
 	/* --------------------------------------------- */
 
-	public void queryBinTree() throws IOException {
-		queryBinTree(nodeRaiz);
-	}
-
-	private void queryBinTree(BinTree nodeAtual) throws IOException {
-
-		// Test for leaf node (answer) and missing branches
-
+	public boolean verificaSeEhFolha(Node nodeAtual) {
 		if (nodeAtual.yesBranch == null) {
 			if (nodeAtual.noBranch == null)
-				System.out.println(nodeAtual.perguntaOuResposta);
-			else
-				System.out.println(
-						"Error: Missing \"Yes\" branch at \"" + nodeAtual.perguntaOuResposta + "\" question");
-			return;
+				System.out.println(nodeAtual.info);
+				return true;
 		}
-		if (nodeAtual.noBranch == null) {
-			System.out.println("Error: Missing \"No\" branch at \"" + nodeAtual.perguntaOuResposta + "\" question");
-			return;
-		}
-
-		// Question
-
-		askQuestion(nodeAtual);
+		return false;
 	}
 
-	private void askQuestion(BinTree nodeAtual) throws IOException {
-		System.out.println(nodeAtual.perguntaOuResposta + " (enter \"Yes\" or \"No\")");
-		String answer = keyboardInput.readLine();
-
-		if (answer.equals("Yes"))
-			queryBinTree(nodeAtual.yesBranch);
-		else {
-			if (answer.equals("No"))
-				queryBinTree(nodeAtual.noBranch);
-			else {
-				System.out.println("ERROR: Must answer \"Yes\" or \"No\"");
-				askQuestion(nodeAtual);
-			}
+	public Node escutandoResposta(Node nodeAtual, boolean resposta) {
+		if (resposta) {
+			return nodeAtual.yesBranch;
+		} else {
+			return nodeAtual.noBranch;
 		}
 	}
 
@@ -210,7 +202,5 @@ public class DecisionTree {
 //
 //		outputBinTree(tag + ".2", nodeAtual.noBranch);
 //	}
-	
+
 }
-
-

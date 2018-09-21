@@ -1,11 +1,12 @@
 package br.uva.modelo;
 
-public class PerguntaResposta {
+public class Atributo {
 
 	private String pergunta;
 	private boolean resposta;
+	private String resultadoFinal;
 	
-	public PerguntaResposta(String newPergunta) {
+	public Atributo(String newPergunta) {
 		this.pergunta = newPergunta;
 	}
 
@@ -14,7 +15,7 @@ public class PerguntaResposta {
 	}
 
 	public void setPergunta(String pergunta) {
-		this.pergunta = pergunta;
+		this.pergunta = "O item " + pergunta.toLowerCase();
 	}
 
 	public boolean isResposta() {
@@ -23,6 +24,14 @@ public class PerguntaResposta {
 
 	public void setResposta(boolean resposta) {
 		this.resposta = resposta;
+	}
+	
+	public String getResultadoFinal() {
+		return resultadoFinal;
+	}
+
+	public void setResultadoFinal(String resultadoFinal) {
+		this.resultadoFinal = resultadoFinal;
 	}
 
 	@Override
