@@ -18,7 +18,7 @@ public class QuestionController {
 
 	@RequestMapping("/questions")
 	public String index(Model model) {
-		motor = new MotorInferencia();
+		motor.reiniciarPerguntas();
 		
 		model.addAttribute("atributo", new Atributo("O item " + motor.getPrimeiraPergunta().toLowerCase()));
 

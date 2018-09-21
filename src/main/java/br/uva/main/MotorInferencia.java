@@ -25,6 +25,10 @@ public class MotorInferencia {
 		return nodeAtual.getInfo();
 	}
 	
+	public void reiniciarPerguntas() {
+		nodeAtual = newTree.getNodeRaiz();
+	}
+	
 	public Atributo inferirResposta(Atributo atributo) {
 		
 		nodeAtual = newTree.escutandoResposta(nodeAtual, atributo.isResposta());
